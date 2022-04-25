@@ -35,7 +35,8 @@ params.rg = fastq1.baseName
 
 process get_reference {
 	publishDir "${params.outdir}/reference"
-	container 'oliversi/hg19'
+	label 'resource'
+
 	
 	output:
 	file "ucsc.hg19.fasta" into reference
@@ -51,7 +52,8 @@ process get_reference {
 
 process get_dbSNP {
 	publishDir "${params.outdir}/reference"
-	container 'oliversi/hg19'
+	label 'resource'
+
 
 	output:
 	file "dbsnp_138.hg19.vcf" into dbsnp
@@ -65,7 +67,8 @@ process get_dbSNP {
 
 process get_golden_indel {
 	publishDir "${params.outdir}/reference"
-	container 'oliversi/hg19'
+	label 'resource'
+
 
 	output:
 	file "Mills_and_1000G_gold_standard.indels.hg19.sites.vcf" into golden_indel
@@ -79,7 +82,8 @@ process get_golden_indel {
 
 process get_hapmap {
 	publishDir "${params.outdir}/reference"
-	container 'oliversi/hg19'
+	label 'resource'
+
 
 	output:
 	file "hapmap_3.3.hg19.sites.vcf" into hapmap
@@ -93,7 +97,8 @@ process get_hapmap {
 
 process get_omni {
 	publishDir "${params.outdir}/reference"
-	container 'oliversi/hg19'
+	label 'resource'
+
 
 	output:
 	file "1000G_omni2.5.hg19.sites.vcf" into omni
@@ -107,7 +112,8 @@ process get_omni {
 
 process get_phase1_SNPs {
 	publishDir "${params.outdir}/reference"
-	container 'oliversi/hg19'
+	label 'resource'
+
 
 	output:
 	file "1000G_phase1.snps.high_confidence.hg19.sites.vcf" into phase1_snps
@@ -121,7 +127,8 @@ process get_phase1_SNPs {
 
 process get_BWA_index {
 	publishDir "${params.outdir}/reference"
-	container 'oliversi/hg19'
+	label 'resource'
+
 
 	output:
 	set "ucsc.hg19.fasta.amb", "ucsc.hg19.fasta.ann", "ucsc.hg19.fasta.bwt", "ucsc.hg19.fasta.pac", "ucsc.hg19.fasta.sa" into bwa_index
@@ -137,7 +144,8 @@ process get_BWA_index {
 
 process BWA {
 	publishDir "${params.outdir}/MappedRead"
-	container 'kathrinklee/bwa:latest'
+	label 'bwa'
+
 
 	input:
 	file reference
@@ -156,7 +164,8 @@ process BWA {
 
 process BWA_sort {
 	publishDir "${params.outdir}/MappedRead"
-	container 'comics/samtools:latest'
+	label 'comic'
+
 	
 	input:
 	file samfile
@@ -172,7 +181,8 @@ process BWA_sort {
 
 process MarkDuplicates {
 	publishDir "${params.outdir}/MappedRead"
-	container 'broadinstitute/gatk'
+	label 'gatk'
+
 	
 	input:
 	file bam_sort
@@ -188,7 +198,8 @@ process MarkDuplicates {
 
 process BaseRecalibrator {
 	publishDir "${params.outdir}/BaseRecalibrator"
-	container 'broadinstitute/gatk:latest'
+	label 'gatk'
+
 	
 	input:
 	file reference
@@ -215,7 +226,8 @@ process BaseRecalibrator {
 
 process ApplyBQSR {
 	publishDir "${params.outdir}/BaseRecalibrator"
-	container 'broadinstitute/gatk:latest'
+	label 'gatk'
+
 	
 	input:
 	file BaseRecalibrator_table
@@ -232,7 +244,8 @@ process ApplyBQSR {
 
 process HaplotypeCaller {
 	publishDir "${params.outdir}/HaplotypeCaller"
-	container 'broadinstitute/gatk:latest'
+	label 'gatk'
+
 	
 	input:
 	file reference
@@ -251,7 +264,8 @@ process HaplotypeCaller {
 
 process GenotypeGVCFs {
 	publishDir "${params.outdir}/HaplotypeCaller"
-	container 'broadinstitute/gatk:latest'
+	label 'gatk'
+
 	
 	input:
 	file reference
@@ -272,7 +286,8 @@ process GenotypeGVCFs {
 
 process VariantRecalibrator_SNPs {
 	publishDir "${params.outdir}/VariantRecalibrator"
-	container 'broadinstitute/gatk:latest'
+	label 'gatk'
+
 	
 	input:
 	file reference
@@ -321,7 +336,8 @@ process VariantRecalibrator_SNPs {
 
 process ApplyVQSR_SNPs {
 	publishDir "${params.outdir}/VariantRecalibrator"
-	container 'broadinstitute/gatk:latest'
+	label 'gatk'
+
 	
 	input:
 	file haplotypecaller_vcf
@@ -348,7 +364,8 @@ process ApplyVQSR_SNPs {
 
 process VariantRecalibrator_INDELs {
 	publishDir "${params.outdir}/VariantRecalibrator"
-	container 'broadinstitute/gatk:latest'
+	label 'gatk'
+
 	
 	input:
 	file reference
@@ -388,7 +405,8 @@ process VariantRecalibrator_INDELs {
 
 process ApplyVQSR_INDELs {
 	publishDir "${params.outdir}/VariantRecalibrator"
-	container 'broadinstitute/gatk:latest'
+	label 'gatk'
+
 	
 	input:
 	file recalibrated_snps_raw_indels
